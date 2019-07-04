@@ -1,0 +1,105 @@
+﻿syntax = "proto3";
+package GRPCServer;
+
+service GRPCServer 
+{
+	rpc Register (User) returns (RegisterResult) {}
+	rpc Login (User) returns (LoginResult) {}
+	rpc Logout (EmptyRequest) returns (StringResponse) {}
+
+	rpc Share (ShareRequest) returns (StringResponse) {}
+	rpc CreateFolder (PathRequest) returns (StringResponse) {}
+	rpc Rename (RenameRequest) returns (StringResponse) {}
+	rpc Delete (PathRequest) returns (StringResponse) {}
+
+	rpc Upload (UploadRequest) returns (StringResponse) {}
+	rpc UploadBlock (stream BlockRequest) returns (StringResponse) {}
+
+	rpc Download (PathRequest) returns (StringResponse) {}
+	rpc DownloadBlock (stream BlockRequest) returns (StringResponse) {}
+
+	rpc GetMetadata (PathRequest) returns (StringResponse) {}
+	rpc ListFolder (PathRequest) returns (StringResponse) {}
+}
+
+message User
+{
+	string Email = 1;
+	string Password = 2;
+	string FirstName = 3;
+	string LastName = 4;
+}
+
+message RegisterResult
+{
+	bool Succeed = 1;
+	int32 Error = 2;
+}
+
+message LoginResult
+{
+	bool Succeed = 1;
+	string SessionId = 2;
+	string FirstName = 3;
+	string LastName = 4;
+	int32 Error = 5;
+}
+
+message EmptyRequest
+{
+	string SessionId = 1;
+}
+
+message PathRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	int64 ModifiedTime = 3;
+}
+
+message RenameRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	string OldPath = 3;
+}
+
+message ShareRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	string Dst = 3;
+}
+
+message UploadRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	string BaseRev = 3;
+	string Hashs = 4;
+}
+
+message PathRevRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	string BaseRev = 3;
+}
+
+message BlockRequest
+{
+	string SessionId = 1;
+	string Path = 2;
+	int64 ModifiedTime = 3;
+	string BaseRev = 4;
+	string OtType = 5;
+	int32 Index = 6;
+	string Hash = 7;
+	int32 Size = 8;
+	bytes Content = 9;
+}
+
+message StringResponse
+{
+	string PayLoad = 1;
+}
