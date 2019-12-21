@@ -1,6 +1,7 @@
 import hashlib
 import config
 import os
+import threading
 
 def sha256(data):
     sha = hashlib.sha256()
